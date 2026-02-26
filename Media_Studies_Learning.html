@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Media Studies – Learning Hub</title>
+    <meta name="description"
+        content="A comprehensive learning resource on Media Studies covering media theory, communication models, digital transformation, and media literacy." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,400&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --bg: #07090f;
+            --surface: #0f1420;
+            --card: #161e30;
+            --card2: #1a2438;
+            --a1: #6366f1;
+            --a2: #8b5cf6;
+            --a3: #06b6d4;
+            --a4: #f59e0b;
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+            --sub: #64748b;
+            --border: rgba(99, 102, 241, .2);
+            --glow: rgba(99, 102, 241, .3);
+            --sidebar: 260px;
+            --radius: 14px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 72px
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden
+        }
+
+        /* ── BG ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(ellipse 70% 50% at 15% 5%, rgba(99, 102, 241, .15) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 40% at 85% 85%, rgba(139, 92, 246, .12) 0%, transparent 55%),
+                radial-gradient(ellipse 40% 35% at 55% 45%, rgba(6, 182, 212, .07) 0%, transparent 50%),
+                var(--bg);
+            pointer-events: none;
+        }
+
+        /* ── TOPBAR ── */
+        #topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            background: rgba(7, 9, 15, .82);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, #fff, var(--a3));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .search-wrap {
+            position: relative;
+            display: flex;
+            align-items: center
+        }
+
+        #searchInput {
+            background: rgba(255, 255, 255, .06);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 7px 16px 7px 36px;
+            font-family: 'Inter', sans-serif;
+            font-size: .8rem;
+            color: var(--text);
+            width: 220px;
+            outline: none;
+            transition: border-color .2s, width .3s;
+        }
+
+        #searchInput:focus {
+            border-color: var(--a1);
+            width: 280px
+        }
+
+        #searchInput::placeholder {
+            color: var(--sub)
+        }
+
+        .search-wrap svg {
+            position: absolute;
+            left: 11px;
+            width: 15px;
+            height: 15px;
+            fill: var(--sub);
+            pointer-events: none
+        }
+
+        #menuToggle {
+            display: none;
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 10px;
+            color: var(--text);
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .progress-topbar {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            z-index: 99;
+            height: 2px;
+            background: rgba(255, 255, 255, .06);
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--a1), var(--a3));
+            transition: width .25s ease;
+            box-shadow: 0 0 10px rgba(99, 102, 241, .5);
+        }
+
+        /* ── LAYOUT ── */
+        #layout {
+            display: flex;
+            min-height: 100vh;
+            padding-top: 62px
+        }
+
+        /* ── SIDEBAR ── */
+        #sidebar {
+            width: var(--sidebar);
+            flex-shrink: 0;
+            position: fixed;
+            top: 62px;
+            bottom: 0;
+            left: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background: rgba(15, 20, 32, .9);
+            backdrop-filter: blur(16px);
+            border-right: 1px solid var(--border);
+            padding: 20px 0 40px;
+            transition: transform .3s ease;
+            z-index: 90;
+        }
+
+        #sidebar::-webkit-scrollbar {
+            width: 3px
+        }
+
+        #sidebar::-webkit-scrollbar-thumb {
+            background: var(--a1);
+            border-radius: 3px
+        }
+
+        .sidebar-label {
+            font-size: .64rem;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--sub);
+            padding: 0 20px 8px;
+            margin-top: 12px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 20px;
+            cursor: pointer;
+            font-size: .8rem;
+            color: var(--muted);
+            border-left: 2px solid transparent;
+            transition: all .2s ease;
+            position: relative;
+            text-decoration: none;
+        }
+
+        .nav-item:hover {
+            color: var(--text);
+            background: rgba(99, 102, 241, .07);
+            border-left-color: rgba(99, 102, 241, .4)
+        }
+
+        .nav-item.active {
+            color: var(--a1);
+            background: rgba(99, 102, 241, .1);
+            border-left-color: var(--a1);
+            font-weight: 600
+        }
+
+        .nav-num {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            font-size: .65rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(99, 102, 241, .15);
+            color: var(--a1);
+        }
+
+        .nav-item.active .nav-num {
+            background: var(--a1);
+            color: #fff
+        }
+
+        /* ── MAIN ── */
+        #main {
+            margin-left: var(--sidebar);
+            flex: 1;
+            padding: 0 0 80px;
+        }
+
+        /* ── HERO ── */
+        #hero {
+            padding: 64px 56px 56px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, .08) 0%, rgba(6, 182, 212, .05) 100%);
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #hero::after {
+            content: '';
+            position: absolute;
+            right: -80px;
+            top: -80px;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(rgba(99, 102, 241, .15), transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: .72rem;
+            font-weight: 600;
+            background: rgba(99, 102, 241, .18);
+            color: var(--a1);
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+            border: 1px solid rgba(99, 102, 241, .3);
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            line-height: 1.2;
+            background: linear-gradient(135deg, #fff 50%, var(--a3));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 14px;
+        }
+
+        .hero-sub {
+            font-size: 1rem;
+            color: var(--muted);
+            line-height: 1.7;
+            max-width: 620px;
+            margin-bottom: 32px
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap
+        }
+
+        .stat {
+            text-align: center
+        }
+
+        .stat-num {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--a1)
+        }
+
+        .stat-label {
+            font-size: .72rem;
+            color: var(--sub);
+            text-transform: uppercase;
+            letter-spacing: .08em
+        }
+
+        /* ── SEARCH RESULTS ── */
+        #searchResults {
+            display: none;
+            padding: 20px 56px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(99, 102, 241, .04);
+        }
+
+        .sr-title {
+            font-size: .85rem;
+            color: var(--muted);
+            margin-bottom: 12px
+        }
+
+        .sr-item {
+            display: block;
+            padding: 10px 14px;
+            border-radius: 10px;
+            margin-bottom: 6px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: border-color .2s, transform .2s;
+            text-decoration: none;
+        }
+
+        .sr-item:hover {
+            border-color: var(--a1);
+            transform: translateX(4px)
+        }
+
+        .sr-item-title {
+            font-size: .85rem;
+            font-weight: 600;
+            color: var(--text)
+        }
+
+        .sr-item-match {
+            font-size: .75rem;
+            color: var(--muted);
+            margin-top: 3px
+        }
+
+        /* ── SECTIONS ── */
+        .module {
+            padding: 52px 56px 40px;
+            border-bottom: 1px solid rgba(99, 102, 241, .08);
+            transition: background .3s;
+        }
+
+        .module:target {
+            animation: highlight 1.5s ease
+        }
+
+        @keyframes highlight {
+
+            0%,
+            100% {
+                background: transparent
+            }
+
+            50% {
+                background: rgba(99, 102, 241, .06)
+            }
+        }
+
+        .module-head {
+            display: flex;
+            align-items: flex-start;
+            gap: 18px;
+            margin-bottom: 30px
+        }
+
+        .module-num {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .8rem;
+            font-weight: 800;
+            color: #fff;
+            background: linear-gradient(135deg, var(--a1), var(--a2));
+            box-shadow: 0 4px 16px rgba(99, 102, 241, .35);
+        }
+
+        .module-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.3rem, 2.5vw, 1.7rem);
+            color: #fff;
+            line-height: 1.3;
+        }
+
+        .module-desc {
+            font-size: .85rem;
+            color: var(--muted);
+            margin-top: 4px;
+            line-height: 1.6
+        }
+
+        /* ── CARDS GRID ── */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 14px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid rgba(99, 102, 241, .12);
+            border-radius: var(--radius);
+            padding: 20px;
+            transition: transform .25s ease, border-color .25s, box-shadow .25s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(99, 102, 241, .04), rgba(6, 182, 212, .02));
+            opacity: 0;
+            transition: opacity .3s;
+            pointer-events: none;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(99, 102, 241, .35);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, .15)
+        }
+
+        .card:hover::before {
+            opacity: 1
+        }
+
+        .card-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, .2), rgba(6, 182, 212, .15));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .card-header {
+            font-size: .78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: var(--a3);
+            margin-bottom: 7px
+        }
+
+        .card-body {
+            font-size: .87rem;
+            line-height: 1.65;
+            color: rgba(241, 245, 249, .78)
+        }
+
+        /* Key Concept callout */
+        .concept-box {
+            margin: 24px 0;
+            padding: 18px 22px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, .1), rgba(6, 182, 212, .06));
+            border-left: 3px solid var(--a1);
+            border-radius: 0 var(--radius) var(--radius) 0;
+        }
+
+        .concept-box h4 {
+            font-size: .78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            color: var(--a1);
+            margin-bottom: 6px
+        }
+
+        .concept-box p {
+            font-size: .87rem;
+            line-height: 1.65;
+            color: var(--muted)
+        }
+
+        /* Timeline / step list */
+        .steps {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 16px
+        }
+
+        .step {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            padding: 14px 16px;
+            background: var(--card2);
+            border-radius: var(--radius);
+            border: 1px solid rgba(99, 102, 241, .1)
+        }
+
+        .step-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--a1);
+            flex-shrink: 0;
+            margin-top: 5px;
+            box-shadow: 0 0 8px var(--a1)
+        }
+
+        .step-content strong {
+            font-size: .84rem;
+            color: var(--text);
+            display: block;
+            margin-bottom: 3px
+        }
+
+        .step-content span {
+            font-size: .8rem;
+            color: var(--muted);
+            line-height: 1.55
+        }
+
+        /* Tags */
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-top: 18px
+        }
+
+        .tag {
+            padding: 4px 11px;
+            border-radius: 50px;
+            font-size: .7rem;
+            font-weight: 600;
+            letter-spacing: .05em;
+            border: 1px solid
+        }
+
+        .tag-blue {
+            background: rgba(99, 102, 241, .12);
+            color: var(--a1);
+            border-color: rgba(99, 102, 241, .25)
+        }
+
+        .tag-cyan {
+            background: rgba(6, 182, 212, .1);
+            color: var(--a3);
+            border-color: rgba(6, 182, 212, .25)
+        }
+
+        .tag-amber {
+            background: rgba(245, 158, 11, .1);
+            color: var(--a4);
+            border-color: rgba(245, 158, 11, .25)
+        }
+
+        .tag-purple {
+            background: rgba(139, 92, 246, .1);
+            color: var(--a2);
+            border-color: rgba(139, 92, 246, .25)
+        }
+
+        /* Back to top */
+        #backTop {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--a1);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, .4);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all .3s ease;
+            z-index: 200;
+        }
+
+        #backTop.show {
+            opacity: 1;
+            transform: translateY(0)
+        }
+
+        #backTop svg {
+            width: 16px;
+            height: 16px;
+            fill: #fff
+        }
+
+        #backTop:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 28px rgba(99, 102, 241, .5)
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            margin-left: var(--sidebar);
+            padding: 28px 56px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            font-size: .78rem;
+            color: var(--sub);
+        }
+
+        /* ── RESPONSIVE ── */
+        @media(max-width:768px) {
+            :root {
+                --sidebar: 0px
+            }
+
+            #menuToggle {
+                display: flex;
+                align-items: center
+            }
+
+            #sidebar {
+                transform: translateX(-100%);
+                width: 260px
+            }
+
+            #sidebar.open {
+                transform: translateX(0)
+            }
+
+            #main,
+            footer {
+                margin-left: 0
+            }
+
+            .module {
+                padding: 36px 22px 28px
+            }
+
+            #hero {
+                padding: 40px 22px 36px
+            }
+
+            #searchResults {
+                padding: 16px 22px
+            }
+
+            .cards {
+                grid-template-columns: 1fr
+            }
+
+            #searchInput {
+                width: 160px
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TOP BAR -->
+    <nav id="topbar">
+        <span class="logo-text">📡 Media Studies</span>
+        <div class="search-wrap">
+            <svg viewBox="0 0 24 24">
+                <path
+                    d="M15.5 14h-.79l-.28-.27A6.5 6.5 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+            </svg>
+            <input type="text" id="searchInput" placeholder="Search topics, concepts…" autocomplete="off" />
+        </div>
+        <button id="menuToggle" aria-label="Menu">☰</button>
+    </nav>
+    <div class="progress-topbar">
+        <div class="progress-fill" id="readProg"></div>
+    </div>
+
+    <div id="layout">
+        <!-- SIDEBAR -->
+        <aside id="sidebar">
+            <div class="sidebar-label">Course Modules</div>
+            <div id="navLinks"></div>
+        </aside>
+
+        <!-- MAIN -->
+        <main id="main">
+            <!-- HERO -->
+            <section id="hero">
+                <div class="hero-tag">📚 Learning Hub</div>
+                <h1 class="hero-title">Media Studies<br /><em
+                        style="font-style:italic;font-size:.75em;color:rgba(241,245,249,.7)">Understanding Media as
+                        Social Power</em></h1>
+                <p class="hero-sub">A comprehensive guide to media theory, communication models, democratic functions,
+                    and digital transformation — designed for critical thinkers and media professionals.</p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-num">20</div>
+                        <div class="stat-label">Modules</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-num">80+</div>
+                        <div class="stat-label">Concepts</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-num">6</div>
+                        <div class="stat-label">Theories</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-num">∞</div>
+                        <div class="stat-label">Curiosity</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEARCH RESULTS -->
+            <div id="searchResults">
+                <div class="sr-title">Search results</div>
+                <div id="srList"></div>
+            </div>
+
+            <!-- MODULES rendered by JS -->
+            <div id="modulesRoot"></div>
+        </main>
+    </div>
+
+    <footer>
+        <div style="margin-bottom:5px;font-size:.9rem;font-weight:600;color:var(--muted);">
+            Idea Owner: <span style="color:var(--a3);font-weight:700;">Queen BASINGA</span>
+        </div>
+        <div style="margin-bottom:8px;font-size:.9rem;font-weight:600;color:var(--muted);">
+            Published by <span style="color:var(--a1);font-weight:700;">Johnson BARAKA</span>
+        </div>
+        © 2026 Media Studies Learning Hub · All rights reserved
+    </footer>
+
+    <button id="backTop" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <svg viewBox="0 0 24 24">
+            <path d="M7.41 15.41 12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+        </svg>
+    </button>
+
+    <script>
+        // ── DATA ──────────────────────────────────────────────────
+        const ICONS = ['📡', '🔬', '⚙️', '🏛️', '📺', '💻', '🗣️', '📢', '📨', '🌐', '💰', '🧠', '🚨', '📰', '🔭', '✍️', '🚪', '📣', '🔍', '🌍'];
+        const modules = [
+            {
+                id: 's1', title: 'Introduction to Media', desc: 'Laying the conceptual foundation — media as structured social institutions operating within modern society.',
+                concepts: [
+                    { icon: '🏗️', h: 'Media as Institutionalized Communication', b: 'Media are structured social institutions that systematically produce, distribute, and regulate symbolic content within society. They are not neutral conduits but active shapers of public discourse.' },
+                    { icon: '📡', h: 'Mass Communication as Process', b: 'Mass communication is a technologically mediated process involving institutional senders and large, heterogeneous audiences. It is characterised by one-to-many flow and asymmetric feedback.' },
+                    { icon: '🌐', h: 'Media as Cultural Infrastructure', b: 'Media construct shared meanings, norms, and collective memory. They function as the cultural backbone of society, defining what is considered normal, newsworthy, or significant.' },
+                    { icon: '⚡', h: 'Digital Convergence Era', b: 'Contemporary media operate within converged, networked, and algorithmically structured environments where the boundaries between producers and consumers increasingly blur.' },
+                ],
+                callout: { title: 'Why It Matters', body: 'Media are not just channels of information — they are constitutive of social reality. Understanding their institutional nature is the first step toward media literacy.' },
+                tags: ['Institutions', 'Convergence', 'Mass Communication', 'Cultural Theory']
+            },
+            {
+                id: 's2', title: 'Defining Media', desc: 'Exploring what counts as "media" — from technological extensions to public sphere platforms.',
+                concepts: [
+                    { icon: '🔌', h: 'Communication Through Technology', b: 'Media are technological extensions of human communication, amplifying reach and altering the temporal and spatial dimensions of interaction.' },
+                    { icon: '🎭', h: 'Symbolic Production', b: 'Media produce representations rather than direct reality. Every image, headline, or broadcast is a constructed artefact shaped by editorial choices, ownership, and audience expectations.' },
+                    { icon: '🏛️', h: 'Public Sphere Platform', b: 'Media create arenas for public deliberation and discourse, acting as spaces where citizens engage with political and cultural issues — the digital equivalent of Habermas\'s coffee-house.' },
+                    { icon: '⚖️', h: 'Institutional Mediation', b: 'Content is shaped by ownership, regulation, and political economy. None of these forces are invisible — they leave traces in what gets published, amplified, or silenced.' },
+                ],
+                callout: { title: 'Key Insight', body: 'Every definition of media implies a theory of communication. Choosing how to define media determines what questions we can ask about them.' },
+                tags: ['Representation', 'Public Sphere', 'Ownership', 'Regulation']
+            },
+            {
+                id: 's3', title: 'Core Functions of Media in Society', desc: 'The four classical functions: surveillance, correlation, cultural transmission, and entertainment.',
+                concepts: [
+                    { icon: '👁️', h: 'Surveillance Function', b: 'Monitoring political, economic, and social environments. This function gives citizens the information they need to participate in democracy — from election coverage to weather forecasts.' },
+                    { icon: '🔗', h: 'Correlation Function', b: 'Interpreting and contextualizing events for audiences. Journalists and editors select, rank, and frame stories, deciding which events matter and how they should be understood.' },
+                    { icon: '📜', h: 'Transmission of Culture', b: 'Passing values, ideologies, and norms across generations. Media socialise individuals into shared understandings of history, citizenship, and social roles.' },
+                    { icon: '🎉', h: 'Entertainment Function', b: 'Providing diversion while reinforcing social narratives. Even entertainment media carry ideological weight — genre conventions, character types, and narrative resolutions all communicate values.' },
+                ],
+                callout: { title: 'Lasswell\'s Model', body: 'Harold Lasswell (1948) identified surveillance, correlation, and cultural transmission as the three core functions. Charles Wright later added entertainment as the fourth.' },
+                tags: ['Lasswell', 'Wright', 'Surveillance', 'Cultural Transmission']
+            },
+            {
+                id: 's4', title: 'Media and Democracy', desc: 'Exploring the complex relationship between a free press, democratic governance, and citizen participation.',
+                concepts: [
+                    { icon: '🕵️', h: 'Watchdog Function', b: 'Investigative journalism holds power accountable by exposing corruption, abuse, and injustice. A free press is often described as the "Fourth Estate" — an informal check on the three branches of government.' },
+                    { icon: '📋', h: 'Agenda-Setting Power', b: 'Media influence which issues the public considers important. McCombs and Shaw (1972) demonstrated that the media do not tell people what to think, but what to think about.' },
+                    { icon: '🖼️', h: 'Framing Effects', b: 'Media shape how audiences interpret issues through the selection and emphasis of particular aspects of a story. Framing determines not just salience but also the evaluative tone applied to issues.' },
+                    { icon: '⚡', h: 'Democratic Tension', b: 'Conflict emerges between state control and press freedom. Authoritarian regimes restrict media; even democracies regulate speech. The balance between freedom and responsibility is perpetually contested.' },
+                ],
+                callout: { title: 'Critical Note', body: 'Concentration of media ownership poses a structural threat to democratic plurality. When few corporations control most outlets, agenda-setting power becomes disproportionately concentrated.' },
+                tags: ['Fourth Estate', 'Agenda-Setting', 'Framing', 'Press Freedom']
+            },
+            {
+                id: 's5', title: 'Types of Media Systems', desc: 'A taxonomy of media platforms — from mass broadcast to networked participatory environments.',
+                concepts: [
+                    { icon: '📺', h: 'Mass Media', b: 'Broadcast and print systems reaching large audiences. Television, radio, and newspapers operate through professional production, editorial gatekeeping, and broad geographic distribution.' },
+                    { icon: '🏘️', h: 'Community Media', b: 'Localised platforms emphasising grassroots representation. Community radio stations, local newspapers, and neighbourhood newsletters serve audiences often ignored by mainstream outlets.' },
+                    { icon: '💻', h: 'New Media', b: 'Internet-based, interactive, and participatory platforms. New media blur the line between producer and audience, enabling user-generated content, viral distribution, and real-time interaction.' },
+                    { icon: '🔄', h: 'Hybrid Media Systems', b: 'Convergence between legacy and digital platforms. Most media organisations now operate across multiple formats, combining broadcast with social media, print with podcast, and journalism with data analytics.' },
+                ],
+                tags: ['Broadcast', 'Community Radio', 'New Media', 'Convergence']
+            },
+            {
+                id: 's6', title: 'Digital Transformation of Media', desc: 'How ICTs, algorithms, and the network society have reshaped communication.',
+                concepts: [
+                    { icon: '📶', h: 'ICT Expansion', b: 'Information and Communication Technologies enable instant global communication. The smartphone rendered every citizen a potential broadcaster, breaking the institutional monopoly on mass communication.' },
+                    { icon: '🤖', h: 'Algorithmic Distribution', b: 'Platforms curate content through automated systems that optimise for engagement. Filter bubbles and echo chambers emerge when algorithms prioritise content that confirms existing beliefs.' },
+                    { icon: '👤', h: 'User-Generated Content', b: 'Audiences become producers — so-called "prosumers." Platforms like YouTube, TikTok, and Twitter derive their value from user contributions while retaining corporate ownership of the infrastructure.' },
+                    { icon: '🕸️', h: 'Network Society', b: 'Manuel Castells argues that social relations are increasingly mediated through digital networks. Power in the network society belongs to those who control the switches — the platforms, algorithms, and protocols.' },
+                ],
+                callout: { title: 'Castells\'s Network Society', body: 'In the network society, the architecture of networks itself becomes a site of power. Those who design the infrastructure determine what can flow through it.' },
+                tags: ['ICT', 'Algorithms', 'Prosumer', 'Castells', 'Filter Bubble']
+            },
+            {
+                id: 's7', title: 'Levels of Communication', desc: 'From internal thought to global broadcast — a map of communicative scale.',
+                concepts: [
+                    { icon: '🧠', h: 'Intrapersonal', b: 'Internal cognitive meaning-making processes. How individuals process, interpret, and assign significance to information before any external communication occurs.' },
+                    { icon: '🤝', h: 'Interpersonal', b: 'Direct one-to-one interaction with immediate feedback. The richest form of communication in terms of non-verbal cues, emotional nuance, and adaptive response.' },
+                    { icon: '👥', h: 'Group Communication', b: 'Structured interaction within communities. Group dynamics, leadership, roles, and norms all shape how information is shared, interpreted, and acted upon.' },
+                    { icon: '📣', h: 'Mass Communication', b: 'Institutional communication to anonymous audiences. The sender is an organisation; the message is mediated by technology; feedback is delayed, aggregated, and indirect.' },
+                ],
+                tags: ['Intrapersonal', 'Interpersonal', 'Group', 'Mass', 'Scale']
+            },
+            {
+                id: 's8', title: 'Characteristics of Mass Communication', desc: 'What makes mass communication distinctive as a social and technological phenomenon.',
+                concepts: [
+                    { icon: '🏭', h: 'Institutional Production', b: 'Large organisations control message production. Professional roles — reporters, editors, producers, directors — apply established conventions and routines to transform raw events into media content.' },
+                    { icon: '🌍', h: 'Heterogeneous Audience', b: 'Diverse social and demographic backgrounds. Mass audiences are anonymous, large, and scattered — united only by simultaneous exposure to the same mediated content.' },
+                    { icon: '⚙️', h: 'Technological Mediation', b: 'Reliance on print, broadcast, or digital infrastructure. The medium itself shapes the message — McLuhan\'s famous insight — meaning television, radio, and text each impose distinct communicative grammars.' },
+                    { icon: '↔️', h: 'Asymmetrical Feedback', b: 'Historically one-way communication is becoming increasingly interactive. Digital platforms enable real-time audience responses, but the power to publish remains structurally unequal.' },
+                ],
+                callout: { title: 'McLuhan\'s Insight', body: '"The medium is the message." The form of a medium embeds itself in any message it transmits, shaping what can be communicated and how it is received.' },
+                tags: ['McLuhan', 'Institutions', 'Audience', 'Two-way Communication']
+            },
+            {
+                id: 's9', title: 'The SMCR Model', desc: 'Berlo\'s classic model of communication: Sender → Message → Channel → Receiver.',
+                concepts: [
+                    { icon: '📤', h: 'Sender', b: 'Institutional communicator encoding messages. The sender\'s communication skills, attitudes, knowledge, social system, and culture all influence how messages are constructed and packaged.' },
+                    { icon: '📝', h: 'Message', b: 'Symbolic content shaped by editorial processes. Messages consist of elements, structure, content, treatment, and code — each dimension open to interpretive variation.' },
+                    { icon: '📡', h: 'Channel', b: 'Medium influencing message form and meaning. The choice of channel (television, print, audio, digital) constrains what can be expressed and how it will be decoded by the receiver.' },
+                    { icon: '📥', h: 'Receiver', b: 'Audience decoding based on experience and context. Receivers bring their own skills, attitudes, knowledge, and cultural background — meaning is co-constructed, not simply transmitted.' },
+                ],
+                callout: { title: 'Berlo (1960)', body: 'Berlo\'s SMCR model emphasised that communication is a dynamic, relational process — not a simple linear transfer. Each component actively shapes meaning.' },
+                tags: ['SMCR', 'Berlo', 'Encoding', 'Decoding', 'Shannon-Weaver']
+            },
+            {
+                id: 's10', title: 'Contemporary Models of Mass Communication', desc: 'Four paradigms for understanding how media produce and circulate meaning.',
+                concepts: [
+                    { icon: '➡️', h: 'Transmission Model', b: 'Focuses on message effects and influence. Information moves from sender to receiver; effectiveness is measured by reach, recall, and attitude change. Dominant in advertising and political communication.' },
+                    { icon: '🕯️', h: 'Ritual Model', b: 'Media as shared social experience. James Carey argued that communication is less about transmitting information than about maintaining community — a view of media as cultural ceremony.' },
+                    { icon: '📢', h: 'Publicity Model', b: 'Attention as power. In the attention economy, the ability to command visibility is itself a form of capital. Media spectacle and celebrity culture are products of this logic.' },
+                    { icon: '🧩', h: 'Reception Model', b: 'Audiences actively construct meaning. Stuart Hall\'s encoding/decoding model showed that audiences can accept, negotiate, or oppose the preferred readings embedded in media texts.' },
+                ],
+                callout: { title: 'Hall\'s Encoding/Decoding', body: 'Stuart Hall proposed three reading positions: dominant (accepting the intended meaning), negotiated (partially accepting), and oppositional (rejecting in favour of an alternative framework).' },
+                tags: ['James Carey', 'Stuart Hall', 'Reception Theory', 'Transmission', 'Ritual']
+            },
+            {
+                id: 's11', title: 'Political Economy of Media', desc: 'How ownership, commerce, and regulation shape what media can say.',
+                concepts: [
+                    { icon: '🏦', h: 'Ownership Concentration', b: 'Corporate consolidation reduces content diversity. When a handful of conglomerates own most outlets, editorial independence is compromised and perspectives outside the mainstream are marginalised.' },
+                    { icon: '💵', h: 'Commercial Imperatives', b: 'Advertising revenue shapes content priorities. The audience becomes the product sold to advertisers, creating pressure to maximise reach and minimise content that alienates commercial partners.' },
+                    { icon: '⚖️', h: 'State Influence', b: 'Legal frameworks structure media freedom. Licensing regimes, defamation law, official secrets legislation, and broadcast regulation all define the boundaries within which journalists operate.' },
+                    { icon: '📻', h: 'Public Service Model', b: 'Media guided by civic responsibility. Public broadcasters like the BBC are mandated to inform, educate, and entertain without the distorting influence of commercial imperatives.' },
+                ],
+                callout: { title: 'Herman & Chomsky — Propaganda Model', body: 'Five filters shape mainstream media: ownership, advertising, sourcing, flak, and dominant ideology. Together they "manufacture consent" for elite interests.' },
+                tags: ['Herman', 'Chomsky', 'Ownership', 'PSB', 'Political Economy']
+            },
+            {
+                id: 's12', title: 'Media Effects Theories', desc: 'A century of academic debate about how media influence audiences.',
+                concepts: [
+                    { icon: '💉', h: 'Hypodermic Needle Model', b: 'Early 20th-century belief in direct, powerful media effects. Propagandists inject messages directly into passive audiences. Later research showed this was an oversimplification.' },
+                    { icon: '🔀', h: 'Limited Effects Theory', b: 'Katz and Lazarsfeld\'s two-step flow: media effects are mediated by opinion leaders. Audiences are not passive; they select, remember, and interpret media through pre-existing social networks.' },
+                    { icon: '🌱', h: 'Cultivation Theory', b: 'George Gerbner argued that heavy television viewing shapes viewers\' perceptions of social reality. Long-term exposure cultivates a "mean world syndrome" — overestimating violence and danger.' },
+                    { icon: '📋', h: 'Agenda-Setting Theory', b: 'McCombs and Shaw (1972): the media don\'t tell people what to think, but what to think about. The prominence given to issues in news coverage shapes the public\'s issue priorities.' },
+                ],
+                callout: { title: 'Shift from Effects to Meaning', body: 'Contemporary media scholarship has moved from asking "what do media do to audiences?" to "what do audiences do with media?" — foregrounding active interpretation.' },
+                tags: ['Gerbner', 'McCombs', 'Katz', 'Lazarsfeld', 'Cultivation', 'Agenda-Setting']
+            },
+            {
+                id: 's13', title: 'Fake News & Information Disorder', desc: 'A taxonomy of mis-, dis-, and mal-information in the digital age.',
+                concepts: [
+                    { icon: '🎭', h: 'Satirical News', b: 'Fiction used for social critique. Satire mimics news formats to expose absurdity and hypocrisy. The risk is that audiences without sufficient media literacy may mistake satire for factual reporting.' },
+                    { icon: '❓', h: 'Misinformation', b: 'False or inaccurate information shared without deliberate intent to deceive. Errors, misunderstandings, and outdated information circulate virally, often outpacing corrections.' },
+                    { icon: '🎯', h: 'Disinformation', b: 'Deliberate fabrication and strategic manipulation of information for political, economic, or ideological ends. State actors, corporations, and political campaigns are all documented producers of disinformation.' },
+                    { icon: '🔫', h: 'Media Criticism Weaponization', b: 'Political labelling of accurate but unfavourable coverage as "fake news." This weaponization damages public trust in journalism and creates epistemic confusion about what constitutes reliable information.' },
+                ],
+                callout: { title: 'First Draft\'s Framework', body: 'Claire Wardle distinguishes seven types of information disorder on axes of falseness and intent to harm — from satire and parody to fabricated content.' },
+                tags: ['Misinformation', 'Disinformation', 'Wardle', 'Infodemic', 'Trust']
+            },
+            {
+                id: 's14', title: 'News Values – The Seven Pillars', desc: 'What makes an event newsworthy? The professional criteria journalists apply.',
+                concepts: [
+                    { icon: '⏰', h: 'Timeliness', b: 'Recent events are prioritised over older ones. News is perishable. The 24-hour news cycle creates pressure to report first, sometimes at the cost of verification and accuracy.' },
+                    { icon: '📍', h: 'Proximity', b: 'Geographic or cultural closeness increases relevance. A disaster killing 100 people nearby may receive more coverage than one killing thousands far away — a phenomenon critics call "proximity bias."' },
+                    { icon: '💥', h: 'Impact & Prominence', b: 'Stories affecting many people or involving prominent figures attract disproportionate coverage. Elites are inherently newsworthy — their actions, statements, and failures are structurally over-reported.' },
+                    { icon: '✨', h: 'Novelty & Human Interest', b: 'Unusual, emotionally resonant, and human-centred stories attract audience attention. Human interest angles translate abstract issues into relatable personal narratives.' },
+                ],
+                callout: { title: 'Galtung & Ruge (1965)', body: 'Johan Galtung and Mari Holmboe Ruge identified 12 factors determining news selection, including frequency, threshold, unambiguity, meaningfulness, and consonance.' },
+                tags: ['Galtung', 'Ruge', 'News Selection', 'Gatekeeping', 'Newsworthiness']
+            },
+            {
+                id: 's15', title: 'How Research Becomes News', desc: 'The translation process from academic finding to public knowledge.',
+                concepts: [
+                    { icon: '🏆', h: 'Breakthroughs & Awards', b: 'Novel, surprising, or prize-winning findings attract journalistic attention. Science journalism often overemphasises breakthroughs and underreports incremental progress, creating a distorted public image of research.' },
+                    { icon: '🏛️', h: 'Policy Implications', b: 'Research that influences governance becomes newsworthy. Studies with direct policy relevance — on public health, climate, or education — are more likely to be covered and more likely to be misrepresented.' },
+                    { icon: '❤️', h: 'Humanization of Data', b: 'Linking findings to lived experiences makes abstract data accessible. Researchers and science communicators increasingly use narrative, case studies, and personal testimony to bridge the gap between data and audience.' },
+                    { icon: '🔄', h: 'Repackaging for Accessibility', b: 'Translating technical language into public narratives requires simplification. The risk of over-simplification — and of journalists misinterpreting statistical or methodological nuances — is ever present.' },
+                ],
+                tags: ['Science Journalism', 'Knowledge Translation', 'Public Engagement', 'Simplification']
+            },
+            {
+                id: 's16', title: 'Writing an Effective Press Release', desc: 'Strategic communication with the media — structure, framing, and timing.',
+                concepts: [
+                    { icon: '🔺', h: 'Inverted Pyramid Structure', b: 'Key findings are presented first, followed by supporting details and background. The inverted pyramid respects editorial time constraints and ensures the most newsworthy information survives editing.' },
+                    { icon: '📊', h: 'Evidence-Based Framing', b: 'Data-supported conclusions add credibility. Quantitative findings, effect sizes, and confidence levels should be communicated accurately, with appropriate caveats about limitations.' },
+                    { icon: '🎯', h: 'Clear Policy Implications', b: 'Highlight societal relevance to increase newsworthiness. Showing how research findings connect to current policy debates, public health concerns, or economic trends increases the likelihood of coverage.' },
+                    { icon: '⏰', h: 'Strategic Timing', b: 'Link research releases to current events, news cycles, or political moments. A study on misinformation released during an election, or climate data published before a COP summit, gains contextual traction.' },
+                ],
+                callout: { title: 'The Hook', body: 'Every press release needs a hook — a single sentence that explains why this finding matters now. Without a hook, even significant research will be ignored by time-pressed journalists.' },
+                tags: ['Press Release', 'Inverted Pyramid', 'Science Communication', 'Newsworthiness']
+            },
+            {
+                id: 's17', title: 'Media Gatekeeping', desc: 'Who decides what becomes news? The roles of journalists, editors, and managers.',
+                concepts: [
+                    { icon: '🖊️', h: 'Journalists as Content Selectors', b: 'Reporters decide which events to cover, which sources to consult, and which angles to pursue. Their professional norms, beats, and relationships with sources shape what enters the news pipeline.' },
+                    { icon: '✂️', h: 'Editors as Agenda Shapers', b: 'Editors determine the prominence, framing, and depth of stories. Front-page placement, headline choices, and photo selection are all editorial decisions that carry ideological weight.' },
+                    { icon: '📐', h: 'Sub-Editors as Narrative Refiners', b: 'Sub-editors shape headlines, captions, and structure — often without reading the full story. A misleading headline can override a nuanced report in the minds of audience members who read only the top.' },
+                    { icon: '🏢', h: 'Managers as Policy Setters', b: 'Senior management and owners set institutional priorities, risk tolerance, and commercial strategy. They rarely appear in individual stories but their influence shapes what the newsroom considers publishable.' },
+                ],
+                callout: { title: 'Gatekeeper Theory', body: 'David Manning White (1950) first used the term "gatekeeper" to describe how newspaper editors make selection decisions. The metaphor remains powerful because it names the structural power embedded in editorial roles.' },
+                tags: ['White', 'Gatekeeping', 'Editorial Power', 'News Selection', 'Ownership']
+            },
+            {
+                id: 's18', title: 'Media Engagement Strategy', desc: 'Planning and executing effective media outreach for organisations and researchers.',
+                concepts: [
+                    { icon: '🎯', h: 'Audience Profiling', b: 'Identify target groups by demographics, platform behaviours, and media consumption patterns. Different audiences require different channels, tones, and message frames.' },
+                    { icon: '📋', h: 'Strategic Communication Planning', b: 'Develop structured outreach plans with clear objectives, key messages, timelines, and success metrics. Reactive media relations is less effective than proactive, planned engagement.' },
+                    { icon: '📱', h: 'Multi-Platform Dissemination', b: 'Use traditional and digital channels in combination. A research finding may be communicated through a press release, a Twitter thread, a podcast interview, a blog post, and a policy brief simultaneously.' },
+                    { icon: '📈', h: 'Evaluation & Sustainability', b: 'Measure reach, sentiment, and behavioural impact. Refine strategies based on evidence. Effective media engagement is iterative — each campaign provides data to improve the next.' },
+                ],
+                tags: ['Strategic Comms', 'Audience', 'Multi-Platform', 'Evaluation', 'Outreach']
+            },
+            {
+                id: 's19', title: 'Media Literacy', desc: 'The skills citizens need to critically navigate a media-saturated world.',
+                concepts: [
+                    { icon: '🔍', h: 'Critical Analysis Skills', b: 'Evaluate credibility, accuracy, bias, and sourcing. Lateral reading — checking a source\'s reputation through third-party sites — is one of the most effective fact-checking strategies.' },
+                    { icon: '🪞', h: 'Understanding Representation', b: 'Identify stereotypes, absences, and framing. Who is represented? Who is marginalised? Which perspectives are normalised and which are treated as deviant or exotic?' },
+                    { icon: '🧩', h: 'Active Interpretation', b: 'Recognise that media texts are constructed artefacts, not transparent windows onto reality. Every production decision — camera angle, music, editing — shapes the audience\'s experience.' },
+                    { icon: '🗳️', h: 'Democratic Responsibility', b: 'Informed citizens who can critically evaluate media are essential to democratic health. Media literacy education is increasingly recognised as a core component of civic education.' },
+                ],
+                callout: { title: 'NAMLE Definition', body: 'Media literacy is "the ability to access, analyze, evaluate, create, and act using all forms of communication." It is not about distrust, but about informed, active engagement.' },
+                tags: ['NAMLE', 'Critical Thinking', 'Fact-Checking', 'Civic Education', 'Representation']
+            },
+            {
+                id: 's20', title: 'Conclusion – Living in a Media World', desc: 'Synthesising the key themes: power, transformation, participation, and critical engagement.',
+                concepts: [
+                    { icon: '🏗️', h: 'Media as Structural Power', b: 'Media shape knowledge, social norms, and political agendas. Understanding this structural power is the starting point for any critical engagement with contemporary communication.' },
+                    { icon: '⚡', h: 'Transformation Through Technology', b: 'Digital convergence redefines communication at every level — from interpersonal messaging to global broadcast. The pace of technological change outstrips our regulatory and conceptual frameworks.' },
+                    { icon: '🔄', h: 'Blurred Producer-Audience Boundaries', b: 'Participation alters authority structures. When audiences can publish, distribute, and amplify content, the institutional gatekeeping of traditional media is challenged — but not eliminated.' },
+                    { icon: '🔍', h: 'Need for Critical Engagement', b: 'Media literacy is essential for democratic survival. In an environment of algorithmic curation, information disorder, and concentrated ownership, the capacity to critically evaluate media is a civic necessity.' },
+                ],
+                callout: { title: 'The Core Insight', body: 'Media are not mirrors of reality — they are its architects. To understand society, we must understand the media through which it communicates, represents, and reproduces itself.' },
+                tags: ['Power', 'Democracy', 'Digital', 'Media Literacy', 'Critical Theory']
+            },
+        ];
+
+        // ── RENDER MODULES ─────────────────────────────────────────
+        const root = document.getElementById('modulesRoot');
+        const navRoot = document.getElementById('navLinks');
+
+        modules.forEach((m, i) => {
+            // NAV
+            const a = document.createElement('a');
+            a.className = 'nav-item'; a.href = '#' + m.id;
+            a.dataset.id = m.id;
+            a.innerHTML = `<span class="nav-num">${i + 1}</span><span>${m.title}</span>`;
+            navRoot.appendChild(a);
+
+            // SECTION
+            const sec = document.createElement('section');
+            sec.id = m.id; sec.className = 'module';
+
+            const tagsHtml = (m.tags || []).map(t => {
+                const cls = ['tag-blue', 'tag-cyan', 'tag-amber', 'tag-purple'][i % 4];
+                return `<span class="tag ${cls}">${t}</span>`;
+            }).join('');
+
+            const calloutHtml = m.callout
+                ? `<div class="concept-box"><h4>💡 ${m.callout.title}</h4><p>${m.callout.body}</p></div>` : '';
+
+            const cardsHtml = m.concepts.map(c => `
+    <div class="card">
+      <div class="card-icon">${c.icon}</div>
+      <div class="card-header">${c.h}</div>
+      <div class="card-body">${c.b}</div>
+    </div>`).join('');
+
+            sec.innerHTML = `
+    <div class="module-head">
+      <div class="module-num">${ICONS[i]}</div>
+      <div>
+        <div class="module-title">${m.title}</div>
+        <div class="module-desc">${m.desc}</div>
+      </div>
+    </div>
+    <div class="cards">${cardsHtml}</div>
+    ${calloutHtml}
+    <div class="tags">${tagsHtml}</div>`;
+            root.appendChild(sec);
+        });
+
+        // ── ACTIVE NAV on scroll ───────────────────────────────────
+        const navItems = Array.from(document.querySelectorAll('.nav-item'));
+        const sections = Array.from(document.querySelectorAll('.module'));
+        const progBar = document.getElementById('readProg');
+        const backBtn = document.getElementById('backTop');
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    navItems.forEach(n => n.classList.toggle('active', n.dataset.id === e.target.id));
+                }
+            });
+        }, { rootMargin: '-30% 0px -60% 0px' });
+        sections.forEach(s => observer.observe(s));
+
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+            progBar.style.width = (scrolled * 100) + '%';
+            backBtn.classList.toggle('show', window.scrollY > 400);
+        }, { passive: true });
+
+        // ── MOBILE MENU ────────────────────────────────────────────
+        const sidebar = document.getElementById('sidebar');
+        document.getElementById('menuToggle').addEventListener('click', () => sidebar.classList.toggle('open'));
+        document.addEventListener('click', e => {
+            if (!sidebar.contains(e.target) && e.target.id !== 'menuToggle') sidebar.classList.remove('open');
+        });
+        navItems.forEach(n => n.addEventListener('click', () => sidebar.classList.remove('open')));
+
+        // ── SEARCH ─────────────────────────────────────────────────
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+        const srList = document.getElementById('srList');
+
+        searchInput.addEventListener('input', () => {
+            const q = searchInput.value.trim().toLowerCase();
+            srList.innerHTML = '';
+            if (!q) { searchResults.style.display = 'none'; return; }
+            const hits = [];
+            modules.forEach(m => {
+                m.concepts.forEach(c => {
+                    if (c.h.toLowerCase().includes(q) || c.b.toLowerCase().includes(q) || m.title.toLowerCase().includes(q)) {
+                        hits.push({ id: m.id, title: m.title, concept: c.h });
+                    }
+                });
+            });
+            if (!hits.length) { srList.innerHTML = '<div class="sr-item"><div class="sr-item-title">No results found</div></div>'; }
+            else {
+                hits.slice(0, 8).forEach(h => {
+                    const d = document.createElement('a');
+                    d.className = 'sr-item'; d.href = '#' + h.id;
+                    d.innerHTML = `<div class="sr-item-title">${h.concept}</div><div class="sr-item-match">in Module: ${h.title}</div>`;
+                    d.addEventListener('click', () => { searchResults.style.display = 'none'; searchInput.value = ''; });
+                    srList.appendChild(d);
+                });
+            }
+            searchResults.style.display = 'block';
+        });
+    </script>
+</body>
+
+</html>
