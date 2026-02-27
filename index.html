@@ -43,6 +43,35 @@
             scroll-padding-top: 72px
         }
 
+        /* Skip link */
+        .skip-link {
+            position: absolute;
+            left: -9999px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+
+        .skip-link:focus {
+            left: 16px;
+            top: 12px;
+            width: auto;
+            height: auto;
+            padding: 8px 12px;
+            background: var(--a1);
+            color: #fff;
+            border-radius: 6px;
+            z-index: 120;
+            text-decoration: none;
+        }
+
+        /* Visible focus styles for keyboard users */
+        :focus {
+            outline: 3px solid rgba(99,102,241,0.18);
+            outline-offset: 2px;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg);
@@ -137,6 +166,36 @@
             color: var(--text);
             cursor: pointer;
             font-size: 1rem;
+        }
+
+        /* Theme toggle button */
+        #themeToggle {
+            display: none;
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 10px;
+            color: var(--text);
+            cursor: pointer;
+            font-size: 1rem;
+            margin-left: 8px;
+        }
+
+        /* Light theme overrides (higher contrast) */
+        :root[data-theme='light'] {
+            --bg: #f7fafc; /* page background */
+            --surface: #ffffff; /* surfaces */
+            --card: #ffffff; /* card background */
+            --card2: #eef2f7; /* slightly darker card for contrast */
+            --a1: #3743d6; /* primary accent slightly darker */
+            --a2: #6d28d9;
+            --a3: #0f9aa6;
+            --a4: #92400e;
+            --text: #0b1220; /* main text, darker for readability */
+            --muted: #334155; /* muted text */
+            --sub: #475569; /* subtitles */
+            --border: rgba(2, 6, 23, .08); /* subtle border that shows on white */
+            --glow: rgba(55, 67, 214, .06);
         }
 
         .progress-topbar {
@@ -295,11 +354,17 @@
             font-family: 'Playfair Display', serif;
             font-size: clamp(2rem, 4vw, 3rem);
             line-height: 1.2;
-            background: linear-gradient(135deg, #fff 50%, var(--a3));
+            background: linear-gradient(135deg, var(--text) 50%, var(--a3));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 14px;
+        }
+
+        .hero-em {
+            font-style: italic;
+            font-size: .75em;
+            color: var(--muted);
         }
 
         .hero-sub {
@@ -416,7 +481,7 @@
             justify-content: center;
             font-size: .8rem;
             font-weight: 800;
-            color: #fff;
+            color: var(--text);
             background: linear-gradient(135deg, var(--a1), var(--a2));
             box-shadow: 0 4px 16px rgba(99, 102, 241, .35);
         }
@@ -424,7 +489,7 @@
         .module-title {
             font-family: 'Playfair Display', serif;
             font-size: clamp(1.3rem, 2.5vw, 1.7rem);
-            color: #fff;
+            color: var(--text);
             line-height: 1.3;
         }
 
@@ -472,6 +537,13 @@
             opacity: 1
         }
 
+        /* Temporary highlight for search matches */
+        .card.highlight {
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.18), 0 10px 30px rgba(99,102,241,0.12) inset;
+            transform: translateY(-6px) scale(1.01);
+            transition: box-shadow .25s, transform .25s;
+        }
+
         .card-icon {
             width: 36px;
             height: 36px;
@@ -496,7 +568,8 @@
         .card-body {
             font-size: .87rem;
             line-height: 1.65;
-            color: rgba(241, 245, 249, .78)
+            color: var(--text);
+            opacity: 0.9;
         }
 
         /* Key Concept callout */
@@ -703,6 +776,8 @@
 
 <body>
 
+    <a href="#main" class="skip-link">Skip to content</a>
+
     <!-- TOP BAR -->
     <nav id="topbar">
         <span class="logo-text">📡 Media Studies</span>
@@ -713,7 +788,10 @@
             </svg>
             <input type="text" id="searchInput" placeholder="Search topics, concepts…" autocomplete="off" />
         </div>
-        <button id="menuToggle" aria-label="Menu">☰</button>
+        <div style="display:flex;align-items:center;gap:6px">
+            <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+            <button id="menuToggle" aria-label="Menu" aria-expanded="false">☰</button>
+        </div>
     </nav>
     <div class="progress-topbar">
         <div class="progress-fill" id="readProg"></div>
@@ -731,8 +809,7 @@
             <!-- HERO -->
             <section id="hero">
                 <div class="hero-tag">📚 Learning Hub</div>
-                <h1 class="hero-title">Media Studies<br /><em
-                        style="font-style:italic;font-size:.75em;color:rgba(241,245,249,.7)">Understanding Media as
+                <h1 class="hero-title">Media Studies<br /><em class="hero-em">Understanding Media as
                         Social Power</em></h1>
                 <p class="hero-sub">A comprehensive guide to media theory, communication models, democratic functions,
                     and digital transformation — designed for critical thinkers and media professionals.</p>
@@ -1084,30 +1161,125 @@
         const searchResults = document.getElementById('searchResults');
         const srList = document.getElementById('srList');
 
-        searchInput.addEventListener('input', () => {
+        // assign ids to each card for deep linking/highlight
+        document.querySelectorAll('.cards').forEach((cards, mi) => {
+            cards.querySelectorAll('.card').forEach((card, ci) => {
+                card.id = `card-${mi + 1}-${ci + 1}`;
+            });
+        });
+
+        function clearHighlights() {
+            document.querySelectorAll('.card.highlight').forEach(c => c.classList.remove('highlight'));
+        }
+
+        // debounce helper
+        function debounce(fn, wait = 200) {
+            let t;
+            return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), wait); };
+        }
+
+        const doSearch = () => {
             const q = searchInput.value.trim().toLowerCase();
             srList.innerHTML = '';
+            clearHighlights();
             if (!q) { searchResults.style.display = 'none'; return; }
             const hits = [];
-            modules.forEach(m => {
-                m.concepts.forEach(c => {
-                    if (c.h.toLowerCase().includes(q) || c.b.toLowerCase().includes(q) || m.title.toLowerCase().includes(q)) {
-                        hits.push({ id: m.id, title: m.title, concept: c.h });
+            modules.forEach((m, mi) => {
+                m.concepts.forEach((c, ci) => {
+                    if (c.h.toLowerCase().includes(q) || c.b.toLowerCase().includes(q) || m.title.toLowerCase().includes(q) || (m.tags || []).some(t => t.toLowerCase().includes(q))) {
+                        hits.push({ id: m.id, title: m.title, concept: c.h, cardId: `card-${mi + 1}-${ci + 1}` });
                     }
                 });
             });
             if (!hits.length) { srList.innerHTML = '<div class="sr-item"><div class="sr-item-title">No results found</div></div>'; }
             else {
-                hits.slice(0, 8).forEach(h => {
+                hits.slice(0, 10).forEach(h => {
                     const d = document.createElement('a');
-                    d.className = 'sr-item'; d.href = '#' + h.id;
+                    d.className = 'sr-item'; d.href = '#' + h.cardId;
                     d.innerHTML = `<div class="sr-item-title">${h.concept}</div><div class="sr-item-match">in Module: ${h.title}</div>`;
-                    d.addEventListener('click', () => { searchResults.style.display = 'none'; searchInput.value = ''; });
+                    d.addEventListener('click', e => {
+                        e.preventDefault();
+                        searchResults.style.display = 'none';
+                        searchInput.value = '';
+                        const target = document.getElementById(h.cardId);
+                        if (target) {
+                            clearHighlights();
+                            target.classList.add('highlight');
+                            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            setTimeout(() => target.classList.remove('highlight'), 2200);
+                        }
+                    });
                     srList.appendChild(d);
                 });
             }
             searchResults.style.display = 'block';
+        };
+
+        searchInput.addEventListener('input', debounce(doSearch, 220));
+
+        // close search on escape
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                searchResults.style.display = 'none';
+                sidebar.classList.remove('open');
+                document.getElementById('menuToggle').setAttribute('aria-expanded', 'false');
+                clearHighlights();
+            }
         });
+
+        // improve mobile menu: aria-expanded and focus trap
+        const menuToggle = document.getElementById('menuToggle');
+        menuToggle.addEventListener('click', (ev) => {
+            const isOpen = sidebar.classList.toggle('open');
+            menuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            if (isOpen) {
+                // move focus to first nav item
+                const first = sidebar.querySelector('.nav-item');
+                if (first) first.focus();
+            } else {
+                menuToggle.focus();
+            }
+        });
+
+        // simple focus trap when sidebar is open
+        document.addEventListener('focusin', (e) => {
+            if (!sidebar.classList.contains('open')) return;
+            if (!sidebar.contains(e.target) && e.target !== menuToggle) {
+                e.preventDefault();
+                const first = sidebar.querySelector('.nav-item');
+                if (first) first.focus();
+            }
+        });
+
+        // THEME TOGGLE
+        const themeToggle = document.getElementById('themeToggle');
+        const rootEl = document.documentElement;
+
+        function applyTheme(t) {
+            if (t === 'light') rootEl.setAttribute('data-theme', 'light');
+            else rootEl.removeAttribute('data-theme');
+            themeToggle.textContent = (t === 'light') ? '☀️' : '🌙';
+        }
+
+        // load preference (localStorage) or system
+        const saved = localStorage.getItem('ms_theme');
+        if (saved) applyTheme(saved);
+        else {
+            const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+            applyTheme(prefersLight ? 'light' : 'dark');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const current = rootEl.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+            const next = current === 'light' ? 'dark' : 'light';
+            applyTheme(next);
+            localStorage.setItem('ms_theme', next);
+        });
+
+        // show themeToggle on small screens too
+        // (mirror of CSS display: we'll ensure it's available)
+        document.getElementById('themeToggle').style.display = 'inline-flex';
+
     </script>
 </body>
 
